@@ -1,25 +1,38 @@
 import { useState, useEffect } from 'react';
-import { simulationEngine } from '../engine/simulationEngine';
+import { unifiedSimulationEngine } from '../engine/simulationEngine';
 
 export function useSimulation() {
-  const [simState, setSimState] = useState(simulationEngine.stateData);
+  const [state, setState] = useState(unifiedSimulationEngine.stateData);
 
   useEffect(() => {
-    // Subscribe to engine state updates
-    const unsubscribe = simulationEngine.subscribe((updatedState) => {
-      setSimState(updatedState);
+    const unsubscribe = unifiedSimulationEngine.subscribe((updated) => {
+      setState(updated);
     });
-
     return () => unsubscribe();
   }, []);
 
   return {
-    ...simState,
-    startSimulation: () => simulationEngine.start(),
-    pauseSimulation: () => simulationEngine.pause(),
-    resumeSimulation: () => simulationEngine.resume(),
-    resetSimulation: () => simulationEngine.reset(),
-    setSpeed: (speed) => simulationEngine.setSpeed(speed),
-    transitionToState: (idx) => simulationEngine.transitionTo(idx)
+    ...state,
+    // Navigation
+    setRole: (role) => unifiedSimulationEngine.setRole(role),
+    toggleCaseJourney: (open) => unifiedSimulationEngine.toggleCaseJourney(open),
+    setSpeed: (speed) => unifiedSimulationEngine.setSpeed(speed),
+
+    // Manual Actions
+    simulateAnomaly: () => unifiedSimulationEngine.simulateAnomaly(),
+    confirmFarmerAlert: () => unifiedSimulationEngine.confirmFarmerAlert(),
+    acceptParavetCase: () => unifiedSimulationEngine.acceptParavetCase(),
+    toggleParavetChecklist: (key) => unifiedSimulationEngine.toggleParavetChecklist(key),
+    verifyParavetReport: () => unifiedSimulationEngine.verifyParavetReport(),
+    requestLabSample: () => unifiedSimulationEngine.requestLabSample(),
+    receiveLabSample: () => unifiedSimulationEngine.receiveLabSample(),
+    startLabTest: () => unifiedSimulationEngine.startLabTest(),
+    confirmLabResult: () => unifiedSimulationEngine.confirmLabResult(),
+
+    // Auto Demo & Reset
+    startAutoDemo: () => unifiedSimulationEngine.startAutoDemo(),
+    pauseAutoDemo: () => unifiedSimulationEngine.pauseAutoDemo(),
+    resumeAutoDemo: () => unifiedSimulationEngine.resumeAutoDemo(),
+    resetCase: () => unifiedSimulationEngine.resetCase()
   };
 }

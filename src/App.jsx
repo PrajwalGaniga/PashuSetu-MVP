@@ -1,9 +1,9 @@
 import React from 'react';
-import { LiveCaseSimulation } from './pages/LiveCaseSimulation';
+import { MainContainer } from './pages/MainContainer';
 
 function App() {
   return (
-    <LiveCaseSimulation />
+    <MainContainer />
   );
 }
 

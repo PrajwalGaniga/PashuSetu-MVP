@@ -1,97 +1,191 @@
-// PASHUSETU EVENT-DRIVEN SIMULATION ENGINE
-// Decoupled architecture allowing seamless drop-in replacement with FastAPI/WebSocket backend
+// PASHUSETU CENTRAL EVENT-DRIVEN STATE ENGINE
+// Manages shared global case (PS-2026-00421) across all roles: Farmer, Paravet, Vet, Lab, Government, Command Center.
 
-import { SIMULATION_STATES, STATE_SEQUENCE, STATE_CONFIG } from './stateMachine';
 import { DECISION_TRACE_ITEMS } from '../data/simulationData';
 
-class SimulationEngine {
+export const ROLES = {
+  COMMAND_CENTER: 'COMMAND_CENTER',
+  FARMER: 'FARMER',
+  PARAVET: 'PARAVET',
+  VETERINARIAN: 'VETERINARIAN',
+  LAB: 'LAB',
+  GOVERNMENT: 'GOVERNMENT'
+};
+
+export const CASE_WORKFLOW_STEPS = [
+  { id: 'FARMER', label: 'FARMER', description: 'Field Sensing & Anomaly Confirmation' },
+  { id: 'PARAVET', label: 'PARAVET', description: 'On-Site Physical Verification & Triage' },
+  { id: 'VETERINARIAN', label: 'VETERINARIAN', description: 'Clinical Review & Diagnostic Authorization' },
+  { id: 'LAB', label: 'LABORATORY', description: 'Molecular RT-PCR Ground Truth Verification' },
+  { id: 'GOVERNMENT', label: 'SURVEILLANCE', description: 'National Grid Intelligence & Feedback Loop' }
+];
+
+class UnifiedSimulationEngine {
   constructor() {
     this.listeners = new Set();
     this.speed = 1.0;
-    this.stateIndex = 0;
-    this.isRunning = false;
-    this.isPaused = false;
     this.timer = null;
-    this.subStepTimer = null;
-    this.remainingDuration = 0;
-    this.stepStartTime = 0;
-
-    // Internal telemetry state
+    this.subTimer = null;
     this.stateData = this.getInitialState();
   }
 
   getInitialState() {
     return {
-      currentState: SIMULATION_STATES.IDLE,
-      stateIndex: 0,
-      journeyNode: null,
+      // Navigation & Operational Role
+      currentRole: ROLES.COMMAND_CENTER,
+      simulationMode: 'MANUAL', // 'MANUAL' or 'AUTO_DEMO'
       speed: this.speed,
+      isAutoDemoRunning: false,
+      isAutoDemoPaused: false,
+      isCaseJourneyOpen: false,
+
+      // Command Center Compatibility State
+      currentState: 'IDLE',
+      journeyNode: null,
       isRunning: false,
       isPaused: false,
+      activeModules: [],
+      particlesActive: false,
+      feedbackLoopFlowing: false,
 
-      // Live Field Telemetry
+      // Shared Global Case: PS-2026-00421
+      caseId: 'PS-2026-00421',
+      farm: {
+        id: 'KA-1023',
+        district: 'Hassan District',
+        taluk: 'Channarayapatna',
+        state: 'Karnataka',
+        farmerName: 'Suresh Patel',
+        phone: '+91 98452-10234',
+        herdSize: 42,
+        coordinates: { lat: 13.0033, lng: 76.1004 }
+      },
+      animal: {
+        id: 'CATTLE-17',
+        tag: 'Cattle #17',
+        species: 'Cattle (Bovine)',
+        breed: 'HF Cross (Female)',
+        age: '4.2 Years',
+        weight: '430 kg',
+        collarId: 'IOT-BLE-094'
+      },
+
+      // Sensor & Field Telemetry (Both top-level and nested for maximum compatibility)
       temperature: 37.2,
+      ammonia: 7,
+      airQuality: 21.0,
       movement: 0,
       feeding: 0,
-      ammonia: 12,
-      airQuality: 18.2,
-      lameness: 'NORMAL',
-
-      // Sensor Statuses
+      lameness: 'NOT DETECTED',
       cameraStatus: 'READY',
       iotStatus: 'READY',
       farmerStatus: 'READY',
 
-      // Central Risk Engine
+      telemetry: {
+        temperature: 37.2,
+        ammonia: 7,
+        airQuality: 21.0,
+        movement: 0,
+        feeding: 0,
+        lameness: 'NOT DETECTED',
+        cameraStatus: 'READY',
+        iotStatus: 'READY',
+        farmerStatus: 'READY'
+      },
+
+      // Anomaly & Alert State
+      anomalyDetected: false,
+      farmerAlertGenerated: false,
+      farmerVerified: false,
+      farmerConfirmed: false,
+      offlineQueue: 'SYNCED', // 'IDLE', 'BUFFERED', 'SYNCING', 'SYNCED'
+      offlineQueueSynced: true,
+
+      // Case Creation & Risk
+      caseCreated: false,
       riskScore: 0,
       priority: 'NORMAL',
       hardRuleTriggered: false,
       activeTraces: [],
 
-      // Active Modules & Particles
-      activeModules: [],
-      particlesActive: false,
-
-      // Farmer Verification Stage
-      farmerModalOpen: false,
-      farmerVerified: false,
-      offlineQueueSynced: false,
-
-      // Case Creation
-      caseCreated: false,
-      caseId: 'PS-2026-00421',
-
-      // Paravet Stage
+      // Paravet State
+      paravetNotified: false,
       paravetAssigned: false,
+      paravetAccepted: false,
       paravetStatus: 'STANDBY', // STANDBY -> ASSIGNED -> ACCEPTED -> ON_SITE
+      paravetChecklist: {
+        animalIdentified: true,
+        farmerReportReviewed: true,
+        symptomsVerified: false,
+        observationsRecorded: false
+      },
+      paravetVerified: false,
+      paravetOfficer: {
+        name: 'Ramesh Gowda',
+        id: 'PV-841',
+        phone: '+91 98452-88412',
+        vehicle: 'Hassan Central Mobile Unit #4',
+        distance: '3.8 km away'
+      },
 
-      // Veterinarian Stage
+      // Veterinarian State
+      vetNotified: false,
       vetReviewed: false,
       vetStatus: 'PENDING', // PENDING -> REVIEWING -> SAMPLE_ORDERED
+      sampleRequested: false,
+      vetOfficer: {
+        name: 'Dr. Ananya Rao, MVSc',
+        role: 'District Epizootiologist / Surgeon',
+        facility: 'Hassan District Veterinary Hospital'
+      },
 
-      // Laboratory Stage
-      labSampleId: 'LAB-2026-8821',
+      // Laboratory State
+      labNotified: false,
+      labReceived: false,
       labProgress: 0,
-      labStatus: 'WAITING', // WAITING -> RECEIVED -> PROCESSING -> CONFIRMED
+      labStatus: 'NO_REQUEST', // 'NO_REQUEST', 'REQUESTED', 'RECEIVED', 'PROCESSING', 'CONFIRMED'
+      labConfirmed: false,
+      sampleId: 'LAB-2026-8821',
+      diagnosticResult: 'FMDV Type O Isolate (Positive)',
+      labFacility: {
+        name: 'Karnataka State Animal Health & Diagnostic Institute',
+        location: 'Bengaluru / Regional Lab Hebbal'
+      },
 
-      // Government Surveillance
+      // Government & Surveillance
+      govSurveillanceUpdated: false,
       surveillanceActive: false,
       mapPulse: false,
-
-      // Ground Truth Feedback Loop
+      activeCasesCount: 127,
+      highRiskCount: 18,
+      confirmedTodayCount: 3,
+      groundTruthRecorded: false,
       groundTruthActive: false,
-      feedbackLoopFlowing: false,
+      feedbackLoopActive: false,
 
-      // System Event Log
+      // Workflow Stage Progression
+      currentStage: 'IDLE',
+      workflowPassed: {
+        farmer: false,
+        paravet: false,
+        veterinarian: false,
+        laboratory: false,
+        government: false,
+        groundTruth: false
+      },
+
+      // Notifications Stack
+      notifications: [],
+
+      // System Event Stream Log
       eventLog: [
-        { id: 1, time: '22:31:00', text: 'PashuSetu Surveillance Core calibrated. Systems online.', type: 'normal' }
+        { id: 1, time: '22:31:00', text: 'PashuSetu Surveillance Core online. Farm #KA-1023 calibrated.', type: 'normal' }
       ]
     };
   }
 
   subscribe(listener) {
     this.listeners.add(listener);
-    // Immediately emit current state
     listener(this.stateData);
     return () => this.listeners.delete(listener);
   }
@@ -113,309 +207,363 @@ class SimulationEngine {
     this.stateData.eventLog = [...this.stateData.eventLog, newLog];
   }
 
-  start() {
-    if (this.isRunning && !this.isPaused) return;
-    if (this.isPaused) {
-      this.resume();
-      return;
-    }
-
-    this.isRunning = true;
-    this.isPaused = false;
-    this.stateIndex = 0;
-    this.stateData = this.getInitialState();
-    this.stateData.isRunning = true;
-    this.addEventLog('Live Simulation started. Initiating continuous field observation.', 'highlight');
+  addNotification(title, message, role = null) {
+    const newNotif = {
+      id: Date.now() + Math.random(),
+      title,
+      message,
+      role,
+      time: new Date().toLocaleTimeString()
+    };
+    this.stateData.notifications = [newNotif, ...this.stateData.notifications.slice(0, 3)];
     this.notify();
 
-    // Transition from IDLE to first active state (DETECTING)
-    this.transitionTo(1);
+    setTimeout(() => {
+      this.stateData.notifications = this.stateData.notifications.filter(n => n.id !== newNotif.id);
+      this.notify();
+    }, 5000);
   }
 
-  pause() {
-    if (!this.isRunning || this.isPaused) return;
-    this.isPaused = true;
-    this.stateData.isPaused = true;
-    clearTimeout(this.timer);
-    clearInterval(this.subStepTimer);
-
-    // Record elapsed time to resume cleanly
-    const elapsed = Date.now() - this.stepStartTime;
-    const nominal = (STATE_CONFIG[STATE_SEQUENCE[this.stateIndex]]?.duration || 4000) / this.speed;
-    this.remainingDuration = Math.max(0, nominal - elapsed);
-
-    this.addEventLog(`Simulation PAUSED at state [${STATE_SEQUENCE[this.stateIndex]}].`, 'normal');
-    this.notify();
-  }
-
-  resume() {
-    if (!this.isRunning || !this.isPaused) return;
-    this.isPaused = false;
-    this.stateData.isPaused = false;
-    this.addEventLog(`Simulation RESUMED.`, 'normal');
-    this.notify();
-
-    const duration = this.remainingDuration || 2000;
-    this.stepStartTime = Date.now();
-    this.timer = setTimeout(() => {
-      this.nextState();
-    }, duration);
-  }
-
-  reset() {
-    clearTimeout(this.timer);
-    clearInterval(this.subStepTimer);
-    this.isRunning = false;
-    this.isPaused = false;
-    this.stateIndex = 0;
-    this.stateData = this.getInitialState();
-    this.addEventLog('Simulation reset to initial calm state. System ready.', 'normal');
+  setRole(role) {
+    this.stateData.currentRole = role;
     this.notify();
   }
 
   setSpeed(speed) {
     this.speed = speed;
     this.stateData.speed = speed;
-    this.addEventLog(`Simulation clock rate adjusted to ${speed}x.`, 'normal');
+    this.addEventLog(`Simulation speed rate set to ${speed}x.`, 'normal');
+    this.notify();
+  }
+
+  toggleCaseJourney(open = null) {
+    this.stateData.isCaseJourneyOpen = open !== null ? open : !this.stateData.isCaseJourneyOpen;
+    this.notify();
+  }
+
+  // Sync nested telemetry with top-level fields
+  updateTelemetry(key, value) {
+    this.stateData[key] = value;
+    this.stateData.telemetry[key] = value;
+  }
+
+  // ==========================================
+  // MANUAL WORKFLOW ACTIONS
+  // ==========================================
+
+  // Step 1: Farmer Simulates Health Event Anomaly
+  simulateAnomaly() {
+    if (this.stateData.anomalyDetected) return;
+    this.stateData.anomalyDetected = true;
+    this.stateData.currentState = 'DETECTING';
+    this.stateData.journeyNode = 'REPORTED';
+    this.stateData.currentStage = 'FARMER';
+    this.updateTelemetry('cameraStatus', 'ANALYZING');
+    this.updateTelemetry('iotStatus', 'ANALYZING');
+    this.stateData.activeModules = ['camera', 'iot'];
+    this.stateData.particlesActive = true;
+
+    this.addEventLog('Field Observation: Camera CV detects unusual gait & recumbency on Cattle #17.', 'highlight');
     this.notify();
 
-    // If running, adjust current timer with new speed
-    if (this.isRunning && !this.isPaused) {
-      clearTimeout(this.timer);
-      clearInterval(this.subStepTimer);
-      const elapsed = (Date.now() - this.stepStartTime);
-      const originalDuration = STATE_CONFIG[STATE_SEQUENCE[this.stateIndex]]?.duration || 4000;
-      const remainingAtNewSpeed = Math.max(200, (originalDuration / this.speed) - (elapsed * (this.speed)));
-      this.stepStartTime = Date.now();
-      this.timer = setTimeout(() => {
-        this.nextState();
-      }, remainingAtNewSpeed);
-    }
+    let step = 0;
+    const interval = 500 / this.speed;
+    this.subTimer = setInterval(() => {
+      step++;
+      if (step === 1) {
+        this.updateTelemetry('movement', -12);
+        this.updateTelemetry('temperature', 37.6);
+        this.updateTelemetry('feeding', -10);
+        this.notify();
+      } else if (step === 2) {
+        this.updateTelemetry('movement', -25);
+        this.updateTelemetry('temperature', 38.1);
+        this.updateTelemetry('feeding', -20);
+        this.updateTelemetry('ammonia', 10);
+        this.updateTelemetry('cameraStatus', 'DETECTED');
+        this.notify();
+      } else if (step >= 3) {
+        this.updateTelemetry('movement', -42);
+        this.updateTelemetry('temperature', 38.5);
+        this.updateTelemetry('feeding', -31);
+        this.updateTelemetry('ammonia', 12);
+        this.updateTelemetry('airQuality', 18.2);
+        this.updateTelemetry('lameness', 'DETECTED');
+        this.updateTelemetry('iotStatus', 'DETECTED');
+
+        this.stateData.farmerAlertGenerated = true;
+        this.stateData.offlineQueue = 'BUFFERED';
+        this.stateData.offlineQueueSynced = false;
+        clearInterval(this.subTimer);
+
+        this.addEventLog('IoT Telemetry Alert: Temperature spiked to 38.5°C, Feeding drop 31%.', 'critical');
+        this.addEventLog('Farmer Mobile Alert dispatched: Cattle #17 health anomaly.', 'highlight');
+        this.addNotification('Farmer Health Alert', 'Cattle #17 unusual behaviour detected on Farm #KA-1023.', 'FARMER');
+        this.notify();
+      }
+    }, interval);
   }
 
-  nextState() {
-    if (this.stateIndex >= STATE_SEQUENCE.length - 1) {
-      this.completeSimulation();
-      return;
-    }
-    this.transitionTo(this.stateIndex + 1);
+  // Step 2: Farmer Confirms Alert on Phone
+  confirmFarmerAlert() {
+    if (!this.stateData.farmerAlertGenerated || this.stateData.farmerConfirmed) return;
+    this.stateData.farmerConfirmed = true;
+    this.stateData.farmerVerified = true;
+    this.stateData.workflowPassed.farmer = true;
+    this.stateData.offlineQueue = 'SYNCING';
+    this.updateTelemetry('farmerStatus', 'CONFIRMED');
+
+    this.addEventLog('Farmer Suresh Patel verified anomaly on ground via mobile app.', 'success');
+    this.notify();
+
+    setTimeout(() => {
+      this.stateData.offlineQueue = 'SYNCED';
+      this.stateData.offlineQueueSynced = true;
+      this.stateData.caseCreated = true;
+      this.stateData.currentState = 'CASE_CREATED';
+      this.stateData.riskScore = 87;
+      this.stateData.priority = 'PRIORITY 01';
+      this.stateData.hardRuleTriggered = true;
+      this.stateData.activeTraces = DECISION_TRACE_ITEMS.map(i => i.id);
+
+      // Notify Paravet
+      this.stateData.paravetNotified = true;
+      this.stateData.paravetAssigned = true;
+      this.stateData.paravetStatus = 'ASSIGNED';
+      this.stateData.currentStage = 'PARAVET';
+      this.stateData.journeyNode = 'TRIAGED';
+
+      this.addEventLog('Unified Case created: PS-2026-00421 bound to Cattle #17.', 'highlight');
+      this.addEventLog('Bayesian Risk Engine calculated: Score 87 / 100 [Priority P1 Critical].', 'critical');
+      this.addEventLog('Hard escalation rule triggered: Acute Febrile Anomaly Protocol.', 'critical');
+      this.addEventLog('Paravet Ramesh Gowda (PV-841) notified & geo-dispatched.', 'highlight');
+      this.addNotification('Paravet Dispatch', 'New Case PS-2026-00421 assigned for field verification.', 'PARAVET');
+      this.notify();
+    }, 800 / this.speed);
   }
 
-  transitionTo(index) {
-    clearTimeout(this.timer);
-    clearInterval(this.subStepTimer);
+  // Step 3: Paravet Accepts Case
+  acceptParavetCase() {
+    if (!this.stateData.paravetAssigned || this.stateData.paravetAccepted) return;
+    this.stateData.paravetAccepted = true;
+    this.stateData.paravetStatus = 'ACCEPTED';
+    this.stateData.journeyNode = 'ESCALATED';
+    this.addEventLog('Paravet Ramesh Gowda accepted dispatch. En route to Farm #KA-1023.', 'normal');
+    this.notify();
 
-    this.stateIndex = index;
-    const state = STATE_SEQUENCE[index];
-    const config = STATE_CONFIG[state];
+    setTimeout(() => {
+      this.stateData.paravetStatus = 'ON_SITE';
+      this.addEventLog('Paravet arrived on site at Farm #KA-1023.', 'success');
+      this.notify();
+    }, 1200 / this.speed);
+  }
 
-    this.stateData.currentState = state;
-    this.stateData.stateIndex = index;
-    this.stateData.journeyNode = config.journeyNode;
+  // Step 4: Paravet Toggles Checklist Items
+  toggleParavetChecklist(itemKey) {
+    this.stateData.paravetChecklist[itemKey] = !this.stateData.paravetChecklist[itemKey];
+    this.notify();
+  }
 
-    // Apply state-specific transitions & animations
-    this.applyStatePayload(state);
+  // Step 5: Paravet Submits Field Verification Report
+  verifyParavetReport() {
+    if (!this.stateData.paravetAccepted || this.stateData.paravetVerified) return;
+    this.stateData.paravetChecklist.symptomsVerified = true;
+    this.stateData.paravetChecklist.observationsRecorded = true;
+    this.stateData.paravetVerified = true;
+    this.stateData.workflowPassed.paravet = true;
 
-    // Push state config events to event stream
-    if (config.events && config.events.length > 0) {
-      config.events.forEach(evt => {
-        this.addEventLog(evt.text, evt.type, evt.time);
+    // Escalate to Veterinarian
+    this.stateData.vetNotified = true;
+    this.stateData.vetStatus = 'REVIEWING';
+    this.stateData.currentStage = 'VET';
+
+    this.addEventLog('Paravet verified physical symptoms consistent with reported anomaly.', 'success');
+    this.addEventLog('Case PS-2026-00421 escalated to District Veterinarian Dr. Ananya Rao.', 'highlight');
+    this.addNotification('Veterinarian Triage', 'New Verified Case PS-2026-00421 awaiting clinical review.', 'VETERINARIAN');
+    this.notify();
+  }
+
+  // Step 6: Veterinarian Reviews Case & Requests Lab Sample
+  requestLabSample() {
+    if (!this.stateData.paravetVerified || this.stateData.sampleRequested) return;
+    this.stateData.vetReviewed = true;
+    this.stateData.vetStatus = 'SAMPLE_ORDERED';
+    this.stateData.sampleRequested = true;
+    this.stateData.workflowPassed.veterinarian = true;
+    this.stateData.journeyNode = 'SAMPLED';
+
+    // Notify Laboratory
+    this.stateData.labNotified = true;
+    this.stateData.labStatus = 'REQUESTED';
+    this.stateData.currentStage = 'LAB';
+
+    this.addEventLog('Veterinarian Dr. Ananya Rao reviewed multimodal clinical evidence.', 'normal');
+    this.addEventLog('Clinical Decision: Laboratory biological testing ordered. Sample ID: LAB-2026-8821.', 'critical');
+    this.addNotification('Laboratory Request', 'New sample order LAB-2026-8821 received from Field Unit.', 'LAB');
+    this.notify();
+  }
+
+  // Step 7: Lab Technician Receives Sample
+  receiveLabSample() {
+    if (!this.stateData.sampleRequested || this.stateData.labReceived) return;
+    this.stateData.labReceived = true;
+    this.stateData.labStatus = 'RECEIVED';
+    this.addEventLog('Lab received specimen LAB-2026-8821. Digital cold chain verified (4°C).', 'normal');
+    this.notify();
+  }
+
+  // Step 8: Lab Technician Starts RT-PCR Assay
+  startLabTest() {
+    if (!this.stateData.labReceived || this.stateData.labProgress > 0) return;
+    this.stateData.labStatus = 'PROCESSING';
+    this.addEventLog('Automated RT-PCR & ELISA assay initiated in microfluidic cycler.', 'highlight');
+    this.notify();
+
+    const progressMilestones = [25, 50, 75, 100];
+    let pIdx = 0;
+    const progressInterval = 800 / this.speed;
+
+    this.subTimer = setInterval(() => {
+      if (pIdx < progressMilestones.length) {
+        this.stateData.labProgress = progressMilestones[pIdx];
+        this.notify();
+        pIdx++;
+      } else {
+        clearInterval(this.subTimer);
+        this.addEventLog('Fluorescence detection complete: High-titer nucleic isolate identified.', 'highlight');
+        this.notify();
+      }
+    }, progressInterval);
+  }
+
+  // Step 9: Lab Confirms Result & Acquires Ground Truth
+  confirmLabResult() {
+    if (this.stateData.labProgress < 100 || this.stateData.labConfirmed) return;
+    this.stateData.labConfirmed = true;
+    this.stateData.labStatus = 'CONFIRMED';
+    this.stateData.workflowPassed.laboratory = true;
+    this.stateData.journeyNode = 'CONFIRMED';
+
+    // Update Government Surveillance & Record Ground Truth
+    this.stateData.govSurveillanceUpdated = true;
+    this.stateData.surveillanceActive = true;
+    this.stateData.mapPulse = true;
+    this.stateData.groundTruthRecorded = true;
+    this.stateData.groundTruthActive = true;
+    this.stateData.workflowPassed.government = true;
+    this.stateData.workflowPassed.groundTruth = true;
+    this.stateData.currentStage = 'GOV';
+
+    this.addEventLog('Diagnostic result CONFIRMED: Positive FMDV Type O isolate.', 'critical');
+    this.addEventLog('Ground Truth acquired and recorded in national epidemiological repository.', 'success');
+    this.addEventLog('National Disease Surveillance Grid synchronized for Karnataka (Hassan Cluster).', 'highlight');
+    this.addNotification('National Surveillance Alert', 'Confirmed FMDV event recorded in Karnataka cluster.', 'GOVERNMENT');
+    this.notify();
+
+    setTimeout(() => {
+      this.stateData.feedbackLoopActive = true;
+      this.stateData.feedbackLoopFlowing = true;
+      this.stateData.journeyNode = 'SURVEILLANCE';
+      this.stateData.currentStage = 'COMPLETED';
+      this.addEventLog('Ground Truth feedback loop closed: Recalibrating Bayesian priors & outbreak history.', 'success');
+      this.notify();
+    }, 1500 / this.speed);
+  }
+
+  // ==========================================
+  // AUTO DEMO MODE
+  // ==========================================
+  startAutoDemo() {
+    this.resetCase();
+    this.stateData.simulationMode = 'AUTO_DEMO';
+    this.stateData.isAutoDemoRunning = true;
+    this.stateData.isAutoDemoPaused = false;
+    this.addEventLog('AUTO DEMO initiated: Watching case move across all roles.', 'highlight');
+    this.notify();
+
+    const runStep = (action, delay) => {
+      return new Promise(resolve => {
+        this.timer = setTimeout(() => {
+          if (this.stateData.isAutoDemoRunning && !this.stateData.isAutoDemoPaused) {
+            action();
+            resolve();
+          }
+        }, delay / this.speed);
       });
-    }
+    };
 
-    this.notify();
+    (async () => {
+      // Step 1: Farmer view & anomaly
+      this.setRole(ROLES.FARMER);
+      await runStep(() => this.simulateAnomaly(), 1200);
 
-    if (state === SIMULATION_STATES.COMPLETED) {
-      this.completeSimulation();
-      return;
-    }
+      // Step 2: Confirm alert
+      await runStep(() => this.confirmFarmerAlert(), 3400);
 
-    const duration = (config.duration || 4000) / this.speed;
-    this.stepStartTime = Date.now();
-    this.remainingDuration = duration;
+      // Step 3: Paravet view
+      await runStep(() => this.setRole(ROLES.PARAVET), 1800);
+      await runStep(() => this.acceptParavetCase(), 1800);
+      await runStep(() => this.verifyParavetReport(), 2600);
 
-    this.timer = setTimeout(() => {
-      this.nextState();
-    }, duration);
+      // Step 4: Veterinarian view
+      await runStep(() => this.setRole(ROLES.VETERINARIAN), 1800);
+      await runStep(() => this.requestLabSample(), 3000);
+
+      // Step 5: Lab view
+      await runStep(() => this.setRole(ROLES.LAB), 1800);
+      await runStep(() => this.receiveLabSample(), 1500);
+      await runStep(() => this.startLabTest(), 1400);
+
+      // Wait for 100% assay
+      await runStep(() => this.confirmLabResult(), 4200);
+
+      // Step 6: Government view
+      await runStep(() => this.setRole(ROLES.GOVERNMENT), 1800);
+
+      this.stateData.isAutoDemoRunning = false;
+      this.notify();
+    })();
   }
 
-  applyStatePayload(state) {
-    switch (state) {
-      case SIMULATION_STATES.DETECTING:
-        // Animate metrics gradually: Temp 37.2 -> 38.5, Movement 0 -> -42%, Feeding 0 -> -31%
-        this.stateData.cameraStatus = 'ANALYZING';
-        this.stateData.iotStatus = 'ANALYZING';
-        this.stateData.activeModules = ['camera', 'iot'];
-
-        let detectStep = 0;
-        const subInterval = 600 / this.speed;
-        this.subStepTimer = setInterval(() => {
-          detectStep++;
-          if (detectStep === 1) {
-            this.stateData.temperature = 37.6;
-            this.stateData.movement = -12;
-            this.stateData.feeding = -10;
-            this.notify();
-          } else if (detectStep === 2) {
-            this.stateData.temperature = 38.1;
-            this.stateData.movement = -27;
-            this.stateData.feeding = -22;
-            this.stateData.cameraStatus = 'DETECTED';
-            this.notify();
-          } else if (detectStep >= 3) {
-            this.stateData.temperature = 38.5;
-            this.stateData.movement = -42;
-            this.stateData.feeding = -31;
-            this.stateData.lameness = 'DETECTED';
-            this.stateData.iotStatus = 'DETECTED';
-            clearInterval(this.subStepTimer);
-            this.notify();
-          }
-        }, subInterval);
-        break;
-
-      case SIMULATION_STATES.SIGNAL_AGGREGATION:
-        this.stateData.activeModules = ['camera', 'iot', 'weather', 'outbreak'];
-        this.stateData.particlesActive = true;
-        break;
-
-      case SIMULATION_STATES.FARMER_VERIFICATION:
-        this.stateData.farmerModalOpen = true;
-        this.stateData.farmerStatus = 'ANALYZING';
-        this.stateData.activeModules = ['farmer'];
-
-        // Automatically simulate farmer clicking confirm alert after a brief pause
-        setTimeout(() => {
-          if (this.isRunning) {
-            this.stateData.farmerVerified = true;
-            this.stateData.farmerStatus = 'CONFIRMED';
-            this.stateData.offlineQueueSynced = true;
-            this.notify();
-          }
-        }, 1800 / this.speed);
-        break;
-
-      case SIMULATION_STATES.CASE_CREATED:
-        this.stateData.farmerModalOpen = false;
-        this.stateData.caseCreated = true;
-        this.stateData.activeModules = ['camera', 'iot', 'farmer', 'weather', 'outbreak', 'nadres', 'pashudhan'];
-        break;
-
-      case SIMULATION_STATES.RISK_ASSESSMENT:
-        // Animate risk score from 00 -> 18 -> 34 -> 51 -> 69 -> 87
-        const riskSteps = [18, 34, 51, 69, 87];
-        let stepIdx = 0;
-        const riskInterval = 800 / this.speed;
-
-        this.subStepTimer = setInterval(() => {
-          if (stepIdx < riskSteps.length) {
-            this.stateData.riskScore = riskSteps[stepIdx];
-            this.stateData.activeTraces = DECISION_TRACE_ITEMS.slice(0, stepIdx + 2).map(i => i.id);
-            if (this.stateData.riskScore >= 50) {
-              this.stateData.priority = 'HIGH';
-            }
-            if (this.stateData.riskScore >= 80) {
-              this.stateData.priority = 'CRITICAL';
-            }
-            this.notify();
-            stepIdx++;
-          } else {
-            clearInterval(this.subStepTimer);
-          }
-        }, riskInterval);
-        break;
-
-      case SIMULATION_STATES.PRIORITY_ASSIGNED:
-        this.stateData.riskScore = 87;
-        this.stateData.priority = 'PRIORITY 01';
-        this.stateData.hardRuleTriggered = true;
-        this.stateData.activeTraces = DECISION_TRACE_ITEMS.map(i => i.id);
-        break;
-
-      case SIMULATION_STATES.PARAVET_ASSIGNED:
-        this.stateData.paravetAssigned = true;
-        this.stateData.paravetStatus = 'ASSIGNED';
-        setTimeout(() => {
-          if (this.isRunning) {
-            this.stateData.paravetStatus = 'ACCEPTED';
-            this.notify();
-          }
-        }, 1800 / this.speed);
-        setTimeout(() => {
-          if (this.isRunning) {
-            this.stateData.paravetStatus = 'ON_SITE';
-            this.notify();
-          }
-        }, 3600 / this.speed);
-        break;
-
-      case SIMULATION_STATES.VETERINARIAN_REVIEW:
-        this.stateData.vetReviewed = true;
-        this.stateData.vetStatus = 'REVIEWING';
-        setTimeout(() => {
-          if (this.isRunning) {
-            this.stateData.vetStatus = 'SAMPLE_ORDERED';
-            this.notify();
-          }
-        }, 2200 / this.speed);
-        break;
-
-      case SIMULATION_STATES.SAMPLE_COLLECTION:
-        this.stateData.labStatus = 'RECEIVED';
-        break;
-
-      case SIMULATION_STATES.LAB_PROCESSING:
-        this.stateData.labStatus = 'PROCESSING';
-        const progressSteps = [20, 45, 67, 84, 100];
-        let pIdx = 0;
-        const labInterval = 900 / this.speed;
-        this.subStepTimer = setInterval(() => {
-          if (pIdx < progressSteps.length) {
-            this.stateData.labProgress = progressSteps[pIdx];
-            this.notify();
-            pIdx++;
-          } else {
-            clearInterval(this.subStepTimer);
-          }
-        }, labInterval);
-        break;
-
-      case SIMULATION_STATES.LAB_CONFIRMED:
-        this.stateData.labProgress = 100;
-        this.stateData.labStatus = 'CONFIRMED';
-        break;
-
-      case SIMULATION_STATES.GOVERNMENT_SURVEILLANCE:
-        this.stateData.surveillanceActive = true;
-        this.stateData.mapPulse = true;
-        break;
-
-      case SIMULATION_STATES.GROUND_TRUTH:
-        this.stateData.groundTruthActive = true;
-        this.stateData.feedbackLoopFlowing = true;
-        break;
-
-      case SIMULATION_STATES.COMPLETED:
-        this.stateData.isRunning = false;
-        this.stateData.isPaused = false;
-        this.stateData.particlesActive = false;
-        this.stateData.feedbackLoopFlowing = false;
-        break;
-
-      default:
-        break;
-    }
+  pauseAutoDemo() {
+    this.stateData.isAutoDemoPaused = true;
+    this.addEventLog('AUTO DEMO paused.', 'normal');
+    this.notify();
   }
 
-  completeSimulation() {
-    this.isRunning = false;
-    this.isPaused = false;
-    this.stateData.currentState = SIMULATION_STATES.COMPLETED;
-    this.stateData.isRunning = false;
-    this.stateData.isPaused = false;
+  resumeAutoDemo() {
+    this.stateData.isAutoDemoPaused = false;
+    this.addEventLog('AUTO DEMO resumed.', 'normal');
     this.notify();
+  }
+
+  resetCase() {
+    clearTimeout(this.timer);
+    clearInterval(this.subTimer);
+    const role = this.stateData.currentRole;
+    this.stateData = this.getInitialState();
+    this.stateData.currentRole = role;
+    this.addEventLog('Case PS-2026-00421 reset to baseline state. System ready.', 'normal');
+    this.notify();
+  }
+
+  // Backward compatibility alias for Command Center start button
+  start() {
+    this.startAutoDemo();
+  }
+
+  pause() {
+    this.pauseAutoDemo();
+  }
+
+  resume() {
+    this.resumeAutoDemo();
+  }
+
+  reset() {
+    this.resetCase();
   }
 }
 
-// Singleton instance for application runtime
-export const simulationEngine = new SimulationEngine();
+export const unifiedSimulationEngine = new UnifiedSimulationEngine();
+export const simulationEngine = unifiedSimulationEngine;
