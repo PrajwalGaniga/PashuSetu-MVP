@@ -1,0 +1,92 @@
+/* PASHUSETU DESIGN TOKENS - PREMIUM SKEUOMORPHIC INTELLIGENCE CONSOLE */
+
+:root {
+  /* Warm Ivory / Off-White Physical Surfaces */
+  --bg-canvas: #ede8dc;
+  --bg-canvas-pattern: radial-gradient(circle at 50% 50%, #f4f0e6 0%, #e9e3d5 100%);
+  --bg-panel: #fcfaf6;
+  --bg-panel-sunken: #e5dfd2;
+  --bg-panel-inset: #dcd5c6;
+  --bg-plate: #f6f3eb;
+  --bg-bezel: #dfd8ca;
+  --bg-screen-inset: #1c2330;
+  --bg-screen-inset-light: #242f42;
+
+  /* Borders & Bevels */
+  --border-outer: #cec6b7;
+  --border-inner: #ece6da;
+  --border-subtle: #dbd4c6;
+  --border-highlight: rgba(255, 255, 255, 0.85);
+  --border-shadow-rim: rgba(45, 38, 30, 0.18);
+  --border-screen: #37445a;
+
+  /* Typography Colors */
+  --text-main: #1d2532;
+  --text-heading: #111827;
+  --text-secondary: #566172;
+  --text-muted: #808b9c;
+  --text-light: #f1f5f9;
+  --text-lcd-green: #34d399;
+  --text-lcd-amber: #fbbf24;
+  --text-lcd-crimson: #f87171;
+  --text-lcd-cyan: #38bdf8;
+
+  /* Semantic Restrained Accents */
+  --color-primary: #1e3a5f;
+  --color-primary-hover: #162a45;
+  --color-secondary: #3b82f6;
+  --color-success: #15803d;
+  --color-success-bg: #eaf6ed;
+  --color-warning: #b45309;
+  --color-warning-bg: #fef7ed;
+  --color-danger: #b91c1c;
+  --color-danger-bg: #fef2f2;
+  --color-info: #0369a1;
+  --color-info-bg: #f0f9ff;
+
+  /* Physical LED Jewel Indicators */
+  --led-green-core: #22c55e;
+  --led-green-glow: rgba(34, 197, 94, 0.65);
+  --led-amber-core: #f59e0b;
+  --led-amber-glow: rgba(245, 158, 11, 0.65);
+  --led-red-core: #ef4444;
+  --led-red-glow: rgba(239, 68, 68, 0.7);
+  --led-blue-core: #3b82f6;
+  --led-blue-glow: rgba(59, 130, 246, 0.6);
+  --led-off-core: #9ca3af;
+  --led-off-rim: #6b7280;
+
+  /* Skeuomorphic Shadow Layers */
+  --shadow-plate: 
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.08) inset,
+    0 4px 12px rgba(65, 55, 45, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.05);
+
+  --shadow-recessed:
+    inset 0 2px 4px rgba(40, 30, 20, 0.18),
+    inset 0 1px 2px rgba(0, 0, 0, 0.15),
+    0 1px 0 rgba(255, 255, 255, 0.85);
+
+  --shadow-button-raised:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 -1px 1px rgba(0, 0, 0, 0.2) inset,
+    0 3px 6px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.08);
+
+  --shadow-button-pressed:
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(0, 0, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.6);
+
+  /* Fonts */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, "Courier New", monospace;
+
+  /* Sizing & Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-pill: 9999px;
+}

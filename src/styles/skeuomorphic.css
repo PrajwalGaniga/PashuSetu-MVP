@@ -1,0 +1,388 @@
+/* SKEUOMORPHIC TACTILE STYLES - PASHUSETU CONSOLE */
+
+/* Tactile Raised Panel */
+.tactile-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-outer);
+  border-top-color: var(--border-highlight);
+  border-bottom-color: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-plate);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Panel Header */
+.tactile-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(240,235,225,0.4) 100%);
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+
+.tactile-panel-title {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.tactile-panel-subtitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* Recessed Inset Bay */
+.tactile-recessed {
+  background: var(--bg-panel-sunken);
+  border: 1px solid var(--border-subtle);
+  border-top-color: #cac2b2;
+  border-bottom-color: #ffffff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-recessed);
+  position: relative;
+}
+
+/* Dark Terminal / LCD Screen Bay */
+.lcd-screen {
+  background: var(--bg-screen-inset);
+  border: 2px solid #232c3d;
+  border-top-color: #151b27;
+  border-bottom-color: #3f4e6b;
+  border-radius: var(--radius-md);
+  box-shadow: 
+    inset 0 3px 6px rgba(0,0,0,0.6),
+    inset 0 1px 2px rgba(0,0,0,0.8),
+    0 1px 0 rgba(255,255,255,0.8);
+  color: #e2e8f0;
+  font-family: var(--font-mono);
+  position: relative;
+  overflow: hidden;
+}
+
+.lcd-screen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(18, 24, 38, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 1;
+}
+
+/* Physical Mechanical Pushbutton */
+.tactile-btn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #ede8dc 100%);
+  color: var(--text-main);
+  border: 1px solid #c9c1b2;
+  border-top-color: #ffffff;
+  border-bottom-color: #ada494;
+  box-shadow: var(--shadow-button-raised);
+  transform: translateY(0);
+  transition: all 0.12s cubic-bezier(0.2, 0.8, 0.4, 1);
+  user-select: none;
+}
+
+.tactile-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #ffffff 0%, #f4efe5 100%);
+  border-color: #b8b0a0;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 4px 8px rgba(0,0,0,0.14),
+    0 1px 3px rgba(0,0,0,0.08);
+}
+
+.tactile-btn:active:not(:disabled),
+.tactile-btn.is-depressed {
+  background: linear-gradient(180deg, #e3ded2 0%, #eeeae1 100%);
+  border-color: #a89f8f;
+  border-top-color: #8c8373;
+  transform: translateY(2px);
+  box-shadow: var(--shadow-button-pressed);
+}
+
+.tactile-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(30%);
+}
+
+/* Tactile Primary Button (Deep Navy Milled) */
+.tactile-btn-primary {
+  background: linear-gradient(180deg, #2b456e 0%, #152744 100%);
+  color: #ffffff;
+  border: 1px solid #111f36;
+  border-top-color: #4a6fa5;
+  border-bottom-color: #0b1526;
+  box-shadow: 
+    0 1px 0 rgba(255,255,255,0.2) inset,
+    0 -1px 0 rgba(0,0,0,0.4) inset,
+    0 3px 8px rgba(21, 39, 68, 0.35),
+    0 1px 2px rgba(0,0,0,0.15);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.tactile-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #345384 0%, #1a3052 100%);
+  box-shadow: 
+    0 1px 0 rgba(255,255,255,0.3) inset,
+    0 5px 12px rgba(21, 39, 68, 0.45),
+    0 2px 4px rgba(0,0,0,0.2);
+}
+
+.tactile-btn-primary:active:not(:disabled),
+.tactile-btn-primary.is-depressed {
+  background: linear-gradient(180deg, #12213a 0%, #1f3559 100%);
+  border-top-color: #0c1524;
+  box-shadow: 
+    inset 0 3px 5px rgba(0,0,0,0.6),
+    0 1px 0 rgba(255,255,255,0.3);
+}
+
+/* Tactile Secondary Button */
+.tactile-btn-secondary {
+  background: linear-gradient(180deg, #f8f6f0 0%, #e6e0d3 100%);
+  color: var(--text-secondary);
+}
+
+/* Speed Selector Toggle Group */
+.tactile-toggle-group {
+  display: inline-flex;
+  background: var(--bg-panel-sunken);
+  padding: 3px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  border-top-color: #c5bdae;
+  border-bottom-color: #ffffff;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.12);
+  gap: 2px;
+}
+
+.tactile-toggle-item {
+  border: none;
+  background: transparent;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tactile-toggle-item:hover:not(.is-active) {
+  color: var(--text-main);
+  background: rgba(255,255,255,0.4);
+}
+
+.tactile-toggle-item.is-active {
+  background: linear-gradient(180deg, #ffffff 0%, #eeeae0 100%);
+  color: var(--text-main);
+  border: 1px solid #ccc5b6;
+  border-top-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 0 rgba(255,255,255,0.8) inset;
+}
+
+/* Physical LED Jewel Lens Indicator */
+.led-jewel {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  background: #9ca3af;
+  border: 1px solid rgba(0,0,0,0.35);
+  box-shadow: 
+    inset 0 1px 1px rgba(255,255,255,0.6),
+    inset 0 -1px 2px rgba(0,0,0,0.4),
+    0 1px 2px rgba(0,0,0,0.15);
+  transition: all 0.25s ease;
+}
+
+.led-jewel::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 3px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.8);
+  pointer-events: none;
+}
+
+.led-jewel.led-green {
+  background: radial-gradient(circle at 35% 35%, #86efac 0%, #22c55e 60%, #15803d 100%);
+  box-shadow: 
+    0 0 8px var(--led-green-glow),
+    0 0 2px #22c55e,
+    inset 0 1px 1px rgba(255,255,255,0.8);
+}
+
+.led-jewel.led-amber {
+  background: radial-gradient(circle at 35% 35%, #fde68a 0%, #f59e0b 60%, #b45309 100%);
+  box-shadow: 
+    0 0 8px var(--led-amber-glow),
+    0 0 2px #f59e0b,
+    inset 0 1px 1px rgba(255,255,255,0.8);
+}
+
+.led-jewel.led-red {
+  background: radial-gradient(circle at 35% 35%, #fca5a5 0%, #ef4444 60%, #b91c1c 100%);
+  box-shadow: 
+    0 0 9px var(--led-red-glow),
+    0 0 3px #ef4444,
+    inset 0 1px 1px rgba(255,255,255,0.8);
+}
+
+.led-jewel.led-blue {
+  background: radial-gradient(circle at 35% 35%, #93c5fd 0%, #3b82f6 60%, #1d4ed8 100%);
+  box-shadow: 
+    0 0 8px var(--led-blue-glow),
+    0 0 2px #3b82f6,
+    inset 0 1px 1px rgba(255,255,255,0.8);
+}
+
+/* Pulsing LED Effect */
+.led-pulse {
+  animation: ledPulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes ledPulse {
+  0% { opacity: 0.7; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1.04); }
+}
+
+/* Miniature Metal Corner Screws */
+.screw {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #eae6dd 0%, #b8b1a3 70%, #8c8476 100%);
+  border: 0.5px solid #756d61;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.25), inset 0 0.5px 0.5px rgba(255,255,255,0.7);
+  pointer-events: none;
+}
+
+.screw::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 1px;
+  right: 1px;
+  height: 1px;
+  background: #50493f;
+  transform: translateY(-50%) rotate(38deg);
+}
+
+.screw-tl { top: 6px; left: 6px; }
+.screw-tr { top: 6px; right: 6px; }
+.screw-bl { bottom: 6px; left: 6px; }
+.screw-br { bottom: 6px; right: 6px; }
+
+/* Status Badge with hardware feel */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-panel-sunken);
+  color: var(--text-secondary);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.06);
+}
+
+.status-pill.status-ready {
+  color: #2b6cb0;
+  border-color: #bee3f8;
+  background: #ebf8ff;
+}
+
+.status-pill.status-active {
+  color: var(--color-warning);
+  border-color: #feebc8;
+  background: #fffaf0;
+}
+
+.status-pill.status-danger {
+  color: var(--color-danger);
+  border-color: #fed7d7;
+  background: #fff5f5;
+}
+
+.status-pill.status-success {
+  color: var(--color-success);
+  border-color: #c6f6d5;
+  background: #f0fff4;
+}
+
+/* Physical Mechanical Gauge Bar */
+.analog-meter-track {
+  height: 8px;
+  background: #cfc8ba;
+  border-radius: var(--radius-pill);
+  border: 1px solid #b3ac9f;
+  border-top-color: #9c9588;
+  border-bottom-color: #ffffff;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+  overflow: hidden;
+  position: relative;
+}
+
+.analog-meter-bar {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 1px 1px rgba(255,255,255,0.4) inset;
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.analog-meter-bar.bar-amber {
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.analog-meter-bar.bar-red {
+  background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%);
+}
+
+.analog-meter-bar.bar-green {
+  background: linear-gradient(90deg, #22c55e 0%, #15803d 100%);
+}
