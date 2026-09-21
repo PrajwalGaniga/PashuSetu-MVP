@@ -305,6 +305,28 @@ export function RoleWalkthroughTour({
     const cardHeight = 180;
     const margin = 14;
 
+    // Mobile Phone Mode (< 768px): Dock cleanly at bottom (or top if target is near bottom)
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      if (targetRect && targetRect.bottom > window.innerHeight * 0.65) {
+        return {
+          top: '14px',
+          left: '14px',
+          right: '14px',
+          width: 'auto',
+          maxWidth: 'calc(100vw - 28px)',
+          bottom: 'auto'
+        };
+      }
+      return {
+        bottom: '14px',
+        left: '14px',
+        right: '14px',
+        width: 'auto',
+        maxWidth: 'calc(100vw - 28px)',
+        top: 'auto'
+      };
+    }
+
     if (!targetRect) {
       // Center on screen if target element not found
       return {

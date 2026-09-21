@@ -38,20 +38,12 @@ export function LabView({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minHeight: 0, overflowY: 'auto' }}>
       {/* Horizontal Laboratory Assay Pipeline Tracker */}
-      <div id="tour-lab-status-stepper" style={{ 
-        background: 'var(--bg-panel-sunken)', 
-        border: '1px solid var(--border-subtle)', 
-        borderRadius: 8, 
-        padding: '8px 14px', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between' 
-      }}>
+      <div id="tour-lab-status-stepper" className="lab-stepper-tracker">
         <div style={{ fontSize: 9, fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--text-secondary)' }}>
           ASSAY PROTOCOL PIPELINE:
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="lab-stepper-chips">
           {labSteps.map((step, idx) => (
             <React.Fragment key={step.label}>
               <div style={{ 
@@ -65,7 +57,8 @@ export function LabView({
                 fontWeight: 800,
                 background: step.done ? '#f0fdf4' : (step.active ? '#eff6ff' : 'rgba(255,255,255,0.5)'),
                 color: step.done ? '#15803d' : (step.active ? '#1d4ed8' : '#94a3b8'),
-                border: step.done ? '1px solid #86efac' : (step.active ? '1px solid #93c5fd' : '1px solid #cbd5e1')
+                border: step.done ? '1px solid #86efac' : (step.active ? '1px solid #93c5fd' : '1px solid #cbd5e1'),
+                whiteSpace: 'nowrap'
               }}>
                 {step.done ? (
                   <CheckCircle2 size={11} color="#15803d" />
@@ -90,7 +83,7 @@ export function LabView({
       </div>
 
       {/* Main Grid: Sample Intake on Left, Automated Thermal Cycler on Right */}
-      <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 12, flex: 1, minHeight: 0 }}>
+      <div className="lab-main-grid">
         {/* Left Column: Sample Intake & Specimen Barcode Dossier */}
         <div className="tactile-panel" id="tour-lab-case-summary" style={{ padding: 12 }}>
           <span className="screw screw-tl"></span>

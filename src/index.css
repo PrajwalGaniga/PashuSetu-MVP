@@ -4,6 +4,7 @@
 @import './styles/simulation.css';
 @import './styles/roles.css';
 @import './styles/intro_and_tour.css';
+@import './styles/mobile.css';
 
 #root {
   width: 100%;

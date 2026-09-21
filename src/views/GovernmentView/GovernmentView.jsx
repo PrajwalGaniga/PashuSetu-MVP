@@ -32,7 +32,7 @@ export function GovernmentView({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1, minHeight: 0, overflowY: 'auto' }}>
       {/* Top Metrics Row with Clear Simulation Disclaimer Badge */}
-      <div id="tour-gov-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+      <div id="tour-gov-stats-grid" className="gov-stats-grid">
         <div className="tactile-panel" style={{ padding: '10px 14px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: 9, fontFamily: 'var(--font-mono)', color: '#64748b', fontWeight: 800 }}>
@@ -93,7 +93,7 @@ export function GovernmentView({
       </div>
 
       {/* Main Grid: Actual India Map on Left, Case Audit & Ground Truth on Right */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 12, flex: 1, minHeight: 0 }}>
+      <div className="gov-main-grid">
         
         {/* Left: Authentic India Geographic Map Card */}
         <div className="tactile-panel" id="tour-gov-india-map" style={{ padding: 12, display: 'flex', flexDirection: 'column' }}>

@@ -1,0 +1,392 @@
+/* ============================================================
+   PASHUSETU — COMPREHENSIVE MOBILE RESPONSIVENESS & CLEAN PHONE UI
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   TABLETS & SMARTPHONES (<= 960px)
+   ------------------------------------------------------------ */
+@media (max-width: 960px) {
+  /* 1. Body & Root Layout: unlock desktop fixed alignment */
+  body {
+    display: block !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    background-attachment: fixed !important;
+    padding: 0 !important;
+  }
+
+  #root {
+    display: block !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+
+  /* 2. Main Console Viewport Container: full width with natural page flow */
+  .console-viewport {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 8px 10px 85px 10px !important;
+    gap: 10px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* 3. Global Top Bar */
+  .global-header-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+  }
+
+  /* Top row: Brand & subtitle */
+  .global-header-bar > div:first-child {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .brand-title {
+    font-size: 16px !important;
+  }
+
+  .brand-subtitle {
+    font-size: 8.5px !important;
+  }
+
+  /* Middle row: presentation badges */
+  .header-status-center {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+  }
+
+  .header-case-badge,
+  .header-role-badge,
+  .header-simulation-badge {
+    padding: 3px 8px !important;
+    font-size: 8.5px !important;
+  }
+
+  .header-badge-value {
+    font-size: 11px !important;
+  }
+
+  /* Bottom row: action buttons */
+  .global-header-bar > div:last-child {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .global-header-bar .tactile-btn {
+    min-height: 36px !important;
+    padding: 6px 12px !important;
+    font-size: 10.5px !important;
+  }
+
+  /* 4. Global Workflow Bar (Role Switcher Pills) */
+  .global-workflow-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    padding: 8px 10px !important;
+  }
+
+  .workflow-title-label {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .workflow-pill-row {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 8px !important;
+    justify-content: flex-start !important;
+    padding: 2px 2px 6px 2px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .workflow-pill-row::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .role-step-pill-large {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: 6px 12px !important;
+  }
+
+  .workflow-arrow-divider {
+    flex-shrink: 0 !important;
+  }
+
+  /* 5. Main Workspace Layout & Lifecycle Panel */
+  .console-workspace-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+    height: auto !important;
+    gap: 12px !important;
+  }
+
+  .console-role-view-area {
+    width: 100% !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Compact Tappable Response Lifecycle on mobile */
+  .response-lifecycle-panel {
+    width: 100% !important;
+    max-height: none !important;
+    padding: 8px 12px !important;
+    overflow: visible !important;
+  }
+
+  .lifecycle-header {
+    cursor: pointer !important;
+    padding-bottom: 2px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .lifecycle-mobile-toggle {
+    display: block !important;
+    background: #eff6ff !important;
+    border: 1px solid #bfdbfe !important;
+    border-radius: 4px !important;
+    padding: 2px 6px !important;
+  }
+
+  .lifecycle-mobile-active-strip {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 9px !important;
+    font-family: var(--font-mono, monospace) !important;
+    color: #1e3a8a !important;
+    margin-top: 4px !important;
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
+    border-radius: 4px !important;
+    padding: 3px 8px !important;
+  }
+
+  .lifecycle-timeline {
+    display: none !important;
+  }
+
+  .lifecycle-timeline.is-mobile-open {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 8px !important;
+    gap: 4px !important;
+  }
+
+  .lifecycle-footer {
+    display: none !important;
+  }
+
+  /* 6. Role View Layouts */
+
+  /* FARMER */
+  .farmer-view-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .farm-environment-canvas {
+    height: 190px !important;
+  }
+
+  .sensor-gauges-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  /* PARAVET */
+  .paravet-3col-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* VETERINARIAN */
+  .vet-3col-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* LAB */
+  .lab-stepper-tracker {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    padding: 8px 10px !important;
+    background: var(--bg-panel-sunken);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+  }
+
+  .lab-stepper-chips {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 6px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 4px !important;
+  }
+
+  .lab-stepper-chips::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .lab-main-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* GOVERNMENT */
+  .gov-stats-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .gov-main-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .national-map-card {
+    min-height: 300px !important;
+    height: 350px !important;
+  }
+
+  /* Phone Mockup Container Centering */
+  .phone-mockup-wrapper {
+    width: 100% !important;
+    max-width: 350px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Floating Tactical Role Switcher */
+  .floating-role-switcher {
+    bottom: 12px !important;
+    right: 12px !important;
+  }
+
+  .role-switcher-toggle {
+    padding: 8px 14px !important;
+    font-size: 10.5px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   EXTRA SMALL PHONES (<= 480px)
+   ------------------------------------------------------------ */
+@media (max-width: 480px) {
+  .console-viewport {
+    padding: 6px 8px 90px 8px !important;
+  }
+
+  .brand-title {
+    font-size: 14.5px !important;
+  }
+
+  .sensor-gauges-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gov-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .gov-stats-grid .tactile-panel {
+    padding: 8px 10px !important;
+  }
+
+  .phone-mockup-wrapper {
+    max-width: 100% !important;
+  }
+}
+
+/* Desktop defaults for elements only visible on mobile */
+.lifecycle-mobile-toggle,
+.lifecycle-mobile-active-strip {
+  display: none;
+}
+
+/* Lab stepper chip row on desktop */
+.lab-stepper-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-panel-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 8px 14px;
+}
+
+.lab-stepper-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lab-main-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.gov-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.gov-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}

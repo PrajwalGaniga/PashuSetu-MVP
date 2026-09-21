@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Check, 
   Circle, 
@@ -11,7 +11,8 @@ import {
   TestTubes, 
   CheckCircle2, 
   Building2, 
-  RefreshCw 
+  RefreshCw,
+  ChevronDown
 } from 'lucide-react';
 
 export function ResponseLifecycle({
@@ -94,6 +95,9 @@ export function ResponseLifecycle({
     }
   ];
 
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const activeStage = stages.find(s => s.status === 'ACTIVE') || stages.find(s => s.status === 'WAITING') || stages[stages.length - 1];
+
   return (
     <aside className="response-lifecycle-panel" id="tour-case-lifecycle">
       {/* Corner hardware screws */}
@@ -102,17 +106,38 @@ export function ResponseLifecycle({
       <span className="screw screw-bl"></span>
       <span className="screw screw-br"></span>
 
-      {/* Panel Header */}
-      <div className="lifecycle-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span className="led-jewel led-blue led-pulse" style={{ width: 6, height: 6 }}></span>
-          <span className="lifecycle-title">CASE RESPONSE LIFECYCLE</span>
+      {/* Panel Header (Tappable on mobile to expand/collapse) */}
+      <div 
+        className="lifecycle-header"
+        onClick={() => setIsMobileOpen(prev => !prev)}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span className="led-jewel led-blue led-pulse" style={{ width: 6, height: 6 }}></span>
+            <span className="lifecycle-title">CASE RESPONSE LIFECYCLE</span>
+          </div>
+
+          {/* Mobile Collapse/Expand Trigger Badge */}
+          <div className="lifecycle-mobile-toggle">
+            <span style={{ fontSize: 9, fontFamily: 'var(--font-mono)', color: '#2563eb', fontWeight: 800 }}>
+              {isMobileOpen ? 'CLOSE ▴' : '9 STAGES ▾'}
+            </span>
+          </div>
         </div>
+
         <div className="lifecycle-subtitle">REAL-TIME PROGRESSION</div>
+
+        {/* Mobile-only compact active status row */}
+        {!isMobileOpen && (
+          <div className="lifecycle-mobile-active-strip">
+            <span className="led-jewel led-green"></span>
+            <span>Current: <strong>{activeStage.title}</strong> ({activeStage.subtitle})</span>
+          </div>
+        )}
       </div>
 
-      {/* Timeline Steps */}
-      <div className="lifecycle-timeline">
+      {/* Timeline Steps (Visible on desktop, toggled on mobile) */}
+      <div className={`lifecycle-timeline ${isMobileOpen ? 'is-mobile-open' : ''}`}>
         {stages.map((stage, idx) => {
           const isCompleted = stage.status === 'COMPLETED';
           const isActive = stage.status === 'ACTIVE';
