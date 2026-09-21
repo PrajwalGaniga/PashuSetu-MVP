@@ -493,9 +493,507 @@
 
 .map-state-marker {
   cursor: pointer;
-  transition: transform 0.2s ease;
 }
 
-.map-state-marker:hover {
-  transform: scale(1.15);
+.map-state-marker circle,
+.map-state-marker rect {
+  transition: stroke 0.15s ease, fill 0.15s ease, filter 0.15s ease;
+}
+
+.map-state-marker:hover circle {
+  filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.8));
+}
+
+.map-state-marker:hover rect {
+  stroke: #60a5fa !important;
+  fill: #1e293b !important;
+}
+
+.map-state-marker.is-active circle {
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.9));
+}
+
+/* ============================================================
+   NEW WORKSPACE LAYOUT & PERMANENT RESPONSE LIFECYCLE PANEL
+   ============================================================ */
+
+.console-workspace-layout {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.console-role-view-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Compact Left-Side Disease Response Lifecycle Panel (190-220px) */
+.response-lifecycle-panel {
+  width: 215px;
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-outer);
+  border-top-color: var(--border-highlight);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-plate);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;
+  position: relative;
+  overflow-y: auto;
+}
+
+.lifecycle-header {
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.lifecycle-title {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: 0.05em;
+}
+
+.lifecycle-subtitle {
+  font-size: 8px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.lifecycle-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.lifecycle-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.lifecycle-step.is-active {
+  background: #eff6ff;
+  border-left: 3px solid #3b82f6;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.15);
+}
+
+.lifecycle-step.is-completed {
+  opacity: 0.95;
+}
+
+.lifecycle-step.is-waiting {
+  opacity: 0.55;
+}
+
+.lifecycle-connector {
+  position: absolute;
+  left: 14px;
+  top: 20px;
+  bottom: -6px;
+  width: 2px;
+  background: #e2e8f0;
+  z-index: 1;
+}
+
+.lifecycle-connector.is-completed {
+  background: #22c55e;
+}
+
+.lifecycle-connector.is-active {
+  background: #3b82f6;
+}
+
+.lifecycle-node {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.lifecycle-step.is-completed .lifecycle-node {
+  background: #15803d;
+  border-color: #15803d;
+}
+
+.lifecycle-step.is-active .lifecycle-node {
+  background: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+}
+
+.lifecycle-active-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3b82f6;
+  animation: pulseBeacon 1.2s infinite;
+}
+
+.lifecycle-text-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.lifecycle-stage-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lifecycle-badge {
+  font-size: 7px;
+  background: #3b82f6;
+  color: #ffffff;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.lifecycle-stage-desc {
+  font-size: 8px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.lifecycle-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 6px;
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* ============================================================
+   LARGE ROLE NAVIGATION PILL CONTROLS (GLOBAL WORKFLOW)
+   ============================================================ */
+
+.workflow-title-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.workflow-prefix {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+}
+
+.workflow-subprefix {
+  font-size: 7.5px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.workflow-pill-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.role-step-pill-large {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  background: #ffffff;
+  border: 1.5px solid var(--border-outer);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.4, 1);
+  text-align: left;
+}
+
+.role-step-pill-large:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  border-color: #94a3b8;
+}
+
+.role-step-pill-large.is-active {
+  background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+  border-color: #2563eb;
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.25), 0 1px 0 #ffffff inset;
+  transform: translateY(-1px);
+}
+
+.role-step-pill-large.is-completed {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.role-step-pill-large.is-waiting {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: #e2e8f0;
+  opacity: 0.85;
+}
+
+.role-pill-icon-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.04);
+  flex-shrink: 0;
+}
+
+.role-step-pill-large.is-active .role-pill-icon-box {
+  background: #dbeafe;
+}
+
+.role-step-pill-large.is-completed .role-pill-icon-box {
+  background: #dcfce7;
+}
+
+.pill-step-number {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: #64748b;
+}
+
+.pill-active-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2563eb;
+  box-shadow: 0 0 6px #2563eb;
+  animation: pulseBeacon 1.2s infinite;
+}
+
+.role-pill-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-pill-heading {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 0.02em;
+}
+
+.role-step-pill-large.is-active .role-pill-heading {
+  color: #1d4ed8;
+}
+
+.role-pill-status-tag {
+  font-size: 8px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  margin-top: 1px;
+}
+
+.status-tag.tag-completed {
+  color: #15803d;
+}
+
+.status-tag.tag-active {
+  color: #1d4ed8;
+}
+
+.status-tag.tag-waiting {
+  color: #94a3b8;
+}
+
+.workflow-arrow-divider {
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+}
+
+.workflow-arrow-divider.is-passed {
+  color: #16a34a;
+}
+
+.workflow-stage-meta {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.stage-meta-label {
+  font-size: 8px;
+  font-family: var(--font-mono);
+  color: #64748b;
+}
+
+.stage-meta-value {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+/* ============================================================
+   GLOBAL HEADER PRESENTATION BADGES
+   ============================================================ */
+
+.header-status-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-case-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  background: #eff6ff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #bfdbfe;
+}
+
+.header-badge-label {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: #1e40af;
+}
+
+.header-badge-value {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  font-weight: 900;
+  color: #1e3a8a;
+  letter-spacing: 0.04em;
+}
+
+.header-role-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  background: #ffffff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+}
+
+.header-role-value {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.header-simulation-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+/* ============================================================
+   SIMULATION NOTICE MODAL
+   ============================================================ */
+
+.simulation-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.2s ease forwards;
+}
+
+.simulation-modal-card {
+  width: 580px;
+  max-width: 95vw;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-outer);
+  border-top-color: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.35), 0 1px 0 rgba(255,255,255,0.9) inset;
+  padding: 26px;
+  position: relative;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
+   ROLE VIEW RESPONSIVE LAYOUTS
+   ============================================================ */
+
+.farmer-view-grid {
+  display: grid;
+  grid-template-columns: 1fr 330px;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.paravet-3col-layout {
+  display: grid;
+  grid-template-columns: 240px 320px 1fr;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.vet-3col-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+@keyframes phoneAlertPulse {
+  0% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
+  50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.4); }
+  100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
 }

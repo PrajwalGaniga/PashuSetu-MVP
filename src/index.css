@@ -3,6 +3,7 @@
 @import './styles/skeuomorphic.css';
 @import './styles/simulation.css';
 @import './styles/roles.css';
+@import './styles/intro_and_tour.css';
 
 #root {
   width: 100%;

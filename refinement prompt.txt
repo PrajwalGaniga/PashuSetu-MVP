@@ -1,0 +1,1155 @@
+PASHUSETU — FINAL UX POLISH UPDATE
+==================================
+
+IMPORTANT:
+The existing PashuSetu application is already built and working.
+
+DO NOT rebuild the application.
+DO NOT change the existing architecture.
+DO NOT remove or break any existing workflow, state, role navigation, auto-demo, reset, case journey, phone simulations, maps, or animations.
+
+This is a FINAL UX POLISH update focused on TWO things:
+
+1. A much more attractive animated MVP/simulation introduction screen.
+2. A first-time interactive user guide for EVERY role/screen.
+
+Everything else should remain exactly as it currently works.
+
+============================================================
+PART 1 — ATTRACTIVE SIMULATION INTRODUCTION
+============================================================
+
+CURRENT BEHAVIOR:
+
+When the user opens/reloads the application, the simulation disclaimer appears.
+
+UPDATE THIS EXPERIENCE COMPLETELY.
+
+Instead of showing a normal static warning modal, create a premium animated INTRODUCTION SEQUENCE.
+
+The experience should feel like the opening of a high-end technology demonstration.
+
+Think:
+
+"system boot → explanation → reveal → enter simulation"
+
+Do NOT make it look like a generic website popup.
+
+------------------------------------------------------------
+1. INTRO SCREEN
+------------------------------------------------------------
+
+When the application loads:
+
+Show a full-screen premium overlay above the application.
+
+The actual application should remain hidden underneath until the user enters the simulation.
+
+Background:
+
+Use the existing PashuSetu visual language:
+
+- warm off-white / ivory
+- subtle grid or technical texture
+- navy typography
+- blue system accents
+- very subtle animated particles / grid movement
+- premium engineering-dashboard aesthetic
+
+Do NOT make the background overly flashy.
+
+------------------------------------------------------------
+2. FIRST MESSAGE — SIMULATION NOTICE
+------------------------------------------------------------
+
+Initially show a compact animated warning/system indicator.
+
+For example:
+
+[ SIMULATION MODE ]
+
+Then reveal:
+
+"THIS IS A SIMULATION"
+
+Use a staggered letter/character reveal animation.
+
+The text should appear character-by-character or in small staggered groups.
+
+Example:
+
+T
+TH
+THIS
+THIS IS
+THIS IS A
+THIS IS A SIMULATION
+
+Do NOT make it feel like a typing-terminal hacker animation.
+
+It should feel refined and cinematic.
+
+Use subtle:
+
+opacity
+blur
+translateY
+letter-spacing
+
+animations.
+
+------------------------------------------------------------
+3. SECOND MESSAGE — REAL SYSTEM EXPLANATION
+------------------------------------------------------------
+
+After the first message finishes, transition into the second message.
+
+Use staggered text reveal again.
+
+The message should communicate:
+
+"This interface is an interactive simulation created to demonstrate how the PashuSetu disease-response workflow operates in the real world."
+
+Then reveal a second statement:
+
+"The production application and underlying system have already been developed by the SYSTEM CRASH team."
+
+Then:
+
+"What you are seeing here is a visual demonstration of how that system can move a single livestock-health event across Farmer → Paravet → Veterinarian → Laboratory → Government."
+
+Then:
+
+"Everything shown in this experience is simulated for demonstration purposes."
+
+IMPORTANT:
+
+Do not imply that the displayed sensor readings, map data, case counts, or disease events are real-time government data.
+
+Make the distinction very clear:
+
+REAL SYSTEM:
+Already developed by the System Crash team.
+
+THIS INTERFACE:
+Interactive simulation / demonstration of the workflow.
+
+------------------------------------------------------------
+4. MAKE THE MESSAGE MORE CREATIVE
+------------------------------------------------------------
+
+Do not dump all text onto the screen simultaneously.
+
+Sequence it.
+
+Example:
+
+PHASE 01
+
+[ SIMULATION MODE ]
+
+THIS IS A SIMULATION
+
+↓
+
+PHASE 02
+
+THE SYSTEM BEHIND THE STORY
+IS ALREADY BEING BUILT.
+
+↓
+
+PHASE 03
+
+THE SYSTEM CRASH TEAM
+HAS DEVELOPED THE PRODUCTION APPLICATION.
+
+↓
+
+PHASE 04
+
+THIS EXPERIENCE LETS YOU
+WALK THROUGH ITS INTENDED
+REAL-WORLD WORKFLOW.
+
+↓
+
+PHASE 05
+
+FARMER
+→
+PARAVET
+→
+VETERINARIAN
+→
+LAB
+→
+GOVERNMENT
+
+↓
+
+PHASE 06
+
+READY TO EXPLORE?
+
+This sequence should happen automatically.
+
+Do NOT require the user to click Next for this introduction.
+
+------------------------------------------------------------
+5. ANIMATED TRANSITIONS
+------------------------------------------------------------
+
+Use smooth cinematic transitions between phases.
+
+Preferred animation:
+
+- fade in
+- slight upward movement
+- staggered letters
+- subtle blur → sharp
+- line drawing
+- small system-status pulses
+
+Example:
+
+[ SIMULATION MODE ]
+
+A thin animated line draws underneath.
+
+Then:
+
+THIS IS A SIMULATION
+
+appears.
+
+Then the previous text fades and the next message begins.
+
+Avoid:
+
+- excessive zoom
+- spinning text
+- bouncing
+- flashy gradients
+- gaming-style effects
+
+This is a professional enterprise/engineering presentation.
+
+------------------------------------------------------------
+6. FINAL CTA
+------------------------------------------------------------
+
+After all messages have completed, reveal a central interactive element.
+
+Center of screen:
+
+a subtle PashuSetu icon / shield / system symbol.
+
+Under it:
+
+START YOUR
+SIMULATION JOURNEY
+
+Use a premium circular or pill-shaped CTA.
+
+Example:
+
+       ◉
+START YOUR SIMULATION JOURNEY
+
+Add a subtle breathing/pulse animation.
+
+The button should clearly feel clickable.
+
+------------------------------------------------------------
+7. START BUTTON BEHAVIOR
+------------------------------------------------------------
+
+When the user clicks:
+
+START YOUR SIMULATION JOURNEY
+
+the introduction overlay should:
+
+- smoothly fade
+- slightly scale down
+- reveal the main PashuSetu application underneath
+
+Do NOT simply instantly remove the modal.
+
+Use a polished transition.
+
+Example:
+
+Intro
+↓
+CTA clicked
+↓
+central icon pulses
+↓
+overlay fades
+↓
+application reveals
+↓
+Farmer role becomes visible
+
+------------------------------------------------------------
+8. RELOAD BEHAVIOR
+------------------------------------------------------------
+
+Every browser reload should show the introduction again.
+
+Do NOT permanently suppress it with localStorage.
+
+The purpose is to make every presentation/demo start with this explanation.
+
+After:
+
+START YOUR SIMULATION JOURNEY
+
+the user enters the application normally.
+
+A normal role change should NOT show this simulation introduction again.
+
+Only a page reload/new page load should trigger it.
+
+============================================================
+PART 2 — INTERACTIVE USER GUIDE
+============================================================
+
+SECOND MAJOR UPDATE:
+
+Every role needs its own interactive guided walkthrough.
+
+Roles:
+
+1. FARMER
+2. PARAVET
+3. VETERINARIAN
+4. LAB TECHNICIAN
+5. GOVERNMENT
+
+When the user switches to a role for the FIRST TIME during the current session:
+
+automatically launch a guided tour for that role.
+
+The guide should explain:
+
+- what this screen represents
+- what each important section does
+- what buttons the user can click
+- what action should happen next
+- what the role is responsible for
+
+This should feel like a built-in product walkthrough/manual.
+
+------------------------------------------------------------
+9. IMPORTANT TOUR BEHAVIOR
+------------------------------------------------------------
+
+The guide must NOT block the entire UI unnecessarily.
+
+Use a spotlight/onboarding style.
+
+Dim the rest of the interface slightly.
+
+Highlight the current target element.
+
+Show a compact tooltip/card near the highlighted element.
+
+Example:
+
+┌─────────────────────────────┐
+│ FARMER SIMULATION            │
+│                              │
+│ This is your farm           │
+│ environment. It shows       │
+│ livestock and live-simulated│
+│ sensor activity.             │
+│                              │
+│              SKIP     NEXT →│
+└─────────────────────────────┘
+
+The highlighted element should remain fully visible.
+
+Use:
+
+spotlight
+soft glow
+animated border
+small pointer/arrow
+
+------------------------------------------------------------
+10. EVERY GUIDE MUST HAVE NEXT + SKIP
+------------------------------------------------------------
+
+Every tour step MUST contain:
+
+[ SKIP ]
+
+[ NEXT → ]
+
+Never remove these buttons.
+
+The user can:
+
+NEXT
+→ continue the guide.
+
+SKIP
+→ immediately close the guide and allow normal interaction.
+
+IMPORTANT:
+
+If the user skips the guide, DO NOT disable the application.
+
+The application must work normally.
+
+The guide is purely instructional.
+
+------------------------------------------------------------
+11. IMPORTANT INTERACTION RULE
+------------------------------------------------------------
+
+The guide should explain the NEXT ACTION.
+
+For example:
+
+Guide step:
+
+"This is the simulation trigger.
+Click this button to generate a livestock health event."
+
+Then:
+
+[ SKIP ] [ NEXT → ]
+
+If the user clicks:
+
+NEXT
+
+the guide should move to the next important interaction.
+
+If the user skips:
+
+the guide disappears.
+
+The user can then directly click the actual button.
+
+If the user directly interacts with the actual application button WITHOUT following the guide:
+
+the application should work normally.
+
+DO NOT force the user to complete the tutorial.
+
+The guide must never interfere with the actual functionality.
+
+------------------------------------------------------------
+12. IMPORTANT — USER ACTION SHOULD NOT BREAK THE GUIDE
+------------------------------------------------------------
+
+If the user clicks an actual highlighted button while the guide is open:
+
+allow the real application action to execute.
+
+Then intelligently move the guide to the next relevant step if appropriate.
+
+Example:
+
+Farmer guide says:
+
+"Click SIMULATE HEALTH EVENT."
+
+User clicks the real button.
+
+The event starts.
+
+The guide should detect that the action occurred and then show:
+
+"Great. The simulated anomaly has now been detected."
+
+NEXT →
+
+Then continue to the phone alert.
+
+This will make the guide feel interactive rather than like a slideshow.
+
+------------------------------------------------------------
+13. FARMER TOUR
+------------------------------------------------------------
+
+When Farmer role is opened for the first time:
+
+Start:
+
+FARMER WALKTHROUGH
+
+STEP 1
+
+Highlight:
+
+FARM ENVIRONMENT
+
+Text:
+
+"This is the simulated livestock environment. Healthy animals are shown in green, while an abnormal animal will be highlighted when a simulated event occurs."
+
+Buttons:
+
+SKIP
+NEXT →
+
+STEP 2
+
+Highlight:
+
+CAMERA / CV
+
+Text:
+
+"The Camera/CV layer represents computer-vision monitoring of livestock behavior such as movement or gait."
+
+SKIP
+NEXT →
+
+STEP 3
+
+Highlight:
+
+IoT SENSORS
+
+Text:
+
+"These small sensors represent environmental and livestock telemetry. The animated radio waves visualize simulated sensor communication."
+
+SKIP
+NEXT →
+
+STEP 4
+
+Highlight:
+
+SIMULATION TRIGGER
+
+Text:
+
+"Use this control to generate the simulated health event."
+
+SKIP
+NEXT →
+
+STEP 5
+
+Highlight:
+
+FARMER PHONE
+
+Text:
+
+"The farmer receives the health alert here and can verify the event."
+
+SKIP
+NEXT →
+
+STEP 6
+
+Highlight:
+
+ALERT CONFIRMATION
+
+Text:
+
+"Confirming the alert creates the case and notifies the Paravet."
+
+SKIP
+NEXT →
+
+STEP 7
+
+Highlight:
+
+CASE LIFECYCLE
+
+Text:
+
+"This timeline shows where the case currently sits in the overall response workflow."
+
+SKIP
+DONE
+
+------------------------------------------------------------
+14. PARAVET TOUR
+------------------------------------------------------------
+
+When Paravet role is opened for the first time:
+
+PARAVET WALKTHROUGH
+
+STEP 1
+
+Highlight:
+
+PARAVET PHONE
+
+Text:
+
+"This is the Paravet field application. It receives verified farmer cases requiring on-site attention."
+
+STEP 2
+
+Highlight:
+
+NEW CASE
+
+Text:
+
+"This card contains the case received from the farmer."
+
+STEP 3
+
+Highlight:
+
+ACCEPT CASE
+
+Text:
+
+"Accept the case to begin field verification."
+
+STEP 4
+
+Highlight:
+
+CASE EVIDENCE
+
+Text:
+
+"Review the farmer report, telemetry, and detected anomaly."
+
+STEP 5
+
+Highlight:
+
+VERIFY / REPORT
+
+Text:
+
+"After field verification, report the case to the veterinarian."
+
+STEP 6
+
+Highlight:
+
+LIFECYCLE
+
+Text:
+
+"Once verified, the workflow advances toward veterinary assessment."
+
+------------------------------------------------------------
+15. VETERINARIAN TOUR
+------------------------------------------------------------
+
+VETERINARIAN WALKTHROUGH
+
+STEP 1
+
+Highlight:
+
+CASE SUMMARY
+
+Explain:
+
+"This is the clinical view of the current livestock-health case."
+
+STEP 2
+
+Highlight:
+
+RISK SCORE
+
+Explain:
+
+"The risk score represents the simulated prioritization generated from available evidence."
+
+STEP 3
+
+Highlight:
+
+EVIDENCE PANEL
+
+Explain:
+
+"Review camera, IoT, farmer, Paravet, weather, and historical signals."
+
+STEP 4
+
+Highlight:
+
+MAP
+
+Explain:
+
+"The map provides geographic context for the simulated case."
+
+STEP 5
+
+Highlight:
+
+LAB REQUEST
+
+Explain:
+
+"The veterinarian can request laboratory investigation when further confirmation is required."
+
+STEP 6
+
+Highlight:
+
+CASE LIFECYCLE
+
+Explain:
+
+"This shows the case progression from detection toward laboratory confirmation."
+
+------------------------------------------------------------
+16. LAB TECHNICIAN TOUR
+------------------------------------------------------------
+
+LAB TECHNICIAN WALKTHROUGH
+
+STEP 1
+
+Highlight:
+
+LAB CASE / SAMPLE
+
+Text:
+
+"This is the laboratory workspace for the incoming case."
+
+STEP 2
+
+Highlight:
+
+SAMPLE ID
+
+Text:
+
+"This identifier connects the physical sample to the digital case."
+
+STEP 3
+
+Highlight:
+
+SAMPLE STATUS
+
+Show:
+
+REQUESTED
+→ RECEIVED
+→ PROCESSING
+→ RESULT
+
+STEP 4
+
+Highlight:
+
+PROCESS ACTION
+
+Text:
+
+"Use this action to simulate laboratory processing."
+
+STEP 5
+
+Highlight:
+
+CONFIRM RESULT
+
+Text:
+
+"Confirming the result provides the ground-truth signal for the case."
+
+STEP 6
+
+Highlight:
+
+GROUND TRUTH
+
+Text:
+
+"The confirmed result is passed into the broader surveillance workflow."
+
+------------------------------------------------------------
+17. GOVERNMENT TOUR
+------------------------------------------------------------
+
+GOVERNMENT WALKTHROUGH
+
+STEP 1
+
+Highlight:
+
+INDIA SURVEILLANCE MAP
+
+Text:
+
+"This map represents the national surveillance view using simulated case data."
+
+STEP 2
+
+Highlight:
+
+CASE MARKER
+
+Text:
+
+"Markers represent simulated livestock-health events across the surveillance grid."
+
+STEP 3
+
+Highlight:
+
+CASE AUDIT
+
+Text:
+
+"This panel shows the complete chain of participants involved in the current case."
+
+STEP 4
+
+Highlight:
+
+GROUND TRUTH
+
+Text:
+
+"Laboratory-confirmed evidence becomes part of the ground-truth record."
+
+STEP 5
+
+Highlight:
+
+SURVEILLANCE STATUS
+
+Text:
+
+"This represents how confirmed case information can feed into wider disease intelligence."
+
+STEP 6
+
+Highlight:
+
+CASE LIFECYCLE
+
+Text:
+
+"The lifecycle shows the complete journey from farm-level detection to national surveillance."
+
+============================================================
+18. FIRST-TIME ROLE LOGIC
+============================================================
+
+The guide should appear:
+
+ONCE PER ROLE
+PER CURRENT SESSION.
+
+For example:
+
+User opens Farmer:
+
+Farmer guide appears.
+
+User switches to Paravet:
+
+Paravet guide appears.
+
+User switches to Veterinarian:
+
+Vet guide appears.
+
+User switches back to Farmer:
+
+DO NOT show Farmer guide again.
+
+User switches back to Paravet:
+
+DO NOT show Paravet guide again.
+
+However:
+
+Browser reload
+
+→ reset guide state.
+
+Then each role can show its guide again when visited.
+
+Use a simple in-memory session state.
+
+Do NOT permanently store this as a long-term preference.
+
+============================================================
+19. ROLE SWITCHING
+============================================================
+
+When user clicks:
+
+FARMER
+→ Farmer screen
+
+PARAVET
+→ Paravet screen
+
+VETERINARIAN
+→ Veterinarian screen
+
+LAB
+→ Lab screen
+
+GOVERNMENT
+→ Government screen
+
+Immediately after the new screen is rendered:
+
+if that role has not yet been introduced during the current session:
+
+launch its walkthrough.
+
+Do NOT show the walkthrough before the destination screen exists.
+
+The user must be able to see exactly what the guide is referring to.
+
+============================================================
+20. TOUR VISUAL STYLE
+============================================================
+
+The walkthrough should match the existing PashuSetu design.
+
+Use:
+
+warm ivory cards
+navy typography
+blue accent
+green success
+subtle shadows
+rounded corners
+technical typography
+
+Spotlight:
+
+slightly darkened surrounding UI
+
+Target:
+
+bright and clearly visible.
+
+Add a subtle animated outline around the target.
+
+Example:
+
+target element
+→ soft blue glow
+→ thin moving highlight
+→ tooltip
+
+Do NOT make it look like a generic Bootstrap tutorial.
+
+It should look like a premium enterprise product walkthrough.
+
+============================================================
+21. GUIDE PROGRESS
+============================================================
+
+At the top of the guide card show:
+
+FARMER WALKTHROUGH
+
+Step 2 of 7
+
+or:
+
+● ● ○ ○ ○ ○ ○
+
+This makes it clear how much remains.
+
+============================================================
+22. SKIP BEHAVIOR
+============================================================
+
+When user clicks SKIP:
+
+Immediately close the walkthrough.
+
+Do not show confirmation.
+
+Do not show another popup.
+
+Do not prevent the user from using the application.
+
+The role becomes fully interactive.
+
+============================================================
+23. NEXT BEHAVIOR
+============================================================
+
+When user clicks NEXT:
+
+Move to the next relevant UI element.
+
+Scroll if absolutely necessary.
+
+Prefer not to scroll the page.
+
+Instead position the guide card intelligently.
+
+The next highlighted element must always be visible.
+
+============================================================
+24. COMPLETION
+============================================================
+
+At the final step:
+
+replace:
+
+NEXT
+
+with:
+
+DONE
+
+Example:
+
+┌──────────────────────────────┐
+│ FARMER WALKTHROUGH COMPLETE  │
+│                              │
+│ You now know how the Farmer  │
+│ workflow operates.           │
+│                              │
+│          [ START ]            │
+└──────────────────────────────┘
+
+Clicking START closes the guide.
+
+The actual application remains exactly where it is.
+
+============================================================
+25. IMPORTANT — DO NOT OVERBUILD
+============================================================
+
+These are UX enhancements.
+
+Do NOT:
+
+- rewrite the backend
+- rewrite the global state
+- redesign the map
+- change case IDs
+- remove existing components
+- remove existing role functionality
+- replace working phone simulations
+- change the existing simulation logic
+- introduce unnecessary libraries
+- add authentication
+- add a real database
+- add real government API integrations
+
+Only add:
+
+1. animated simulation introduction
+2. role-specific guided walkthroughs
+3. necessary state handling for the walkthroughs
+
+============================================================
+26. FINAL EXPERIENCE
+============================================================
+
+The final user experience should feel like this:
+
+PAGE LOAD
+↓
+beautiful animated simulation introduction
+↓
+staggered explanation
+↓
+"REAL SYSTEM ALREADY DEVELOPED BY SYSTEM CRASH"
+↓
+"THIS IS THE INTERACTIVE SIMULATION"
+↓
+START YOUR SIMULATION JOURNEY
+↓
+PASHUSETU APPLICATION
+↓
+FARMER GUIDE
+↓
+user explores Farmer
+↓
+switch to PARAVET
+↓
+PARAVET GUIDE
+↓
+user explores Paravet
+↓
+switch to VETERINARIAN
+↓
+VETERINARIAN GUIDE
+↓
+switch to LAB
+↓
+LAB GUIDE
+↓
+switch to GOVERNMENT
+↓
+GOVERNMENT GUIDE
+↓
+complete case journey
+
+The application should feel like a guided technology demonstration rather than simply a dashboard.
+
+============================================================
+27. FINAL QUALITY CHECK
+============================================================
+
+After implementing:
+
+1. Reload page.
+2. Verify animated simulation introduction.
+3. Verify staggered text.
+4. Verify final START button.
+5. Enter application.
+6. Verify Farmer guide.
+7. Skip Farmer guide.
+8. Verify Farmer remains fully functional.
+9. Switch to Paravet.
+10. Verify Paravet guide.
+11. Use NEXT through the Paravet guide.
+12. Switch to Veterinarian.
+13. Verify Vet guide.
+14. Switch to Lab.
+15. Verify Lab guide.
+16. Switch to Government.
+17. Verify Government guide.
+18. Switch back to Farmer.
+19. Verify Farmer guide does NOT appear again.
+20. Reload.
+21. Verify introduction appears again.
+22. Verify role walkthrough state resets for the new session.
+
+MOST IMPORTANT:
+
+The guides must NEVER break the underlying application.
+
+The user should always be able to:
+
+SKIP
+CLICK REAL BUTTONS
+CHANGE ROLES
+RUN THE SIMULATION
+RESET THE CASE
+
+without being trapped inside the onboarding.
+
+The guide teaches the interface.
+
+It does not control the interface.

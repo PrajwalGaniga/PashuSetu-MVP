@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSimulation } from '../hooks/useSimulation';
 import { ROLES } from '../engine/simulationEngine';
 import { GlobalHeader } from '../components/Navigation/GlobalHeader';
@@ -6,6 +6,9 @@ import { GlobalWorkflow } from '../components/Navigation/GlobalWorkflow';
 import { RoleSwitcher } from '../components/Navigation/RoleSwitcher';
 import { NotificationBanner } from '../components/Notification/NotificationBanner';
 import { CaseJourneyModal } from '../components/CaseJourney/CaseJourneyModal';
+import { ResponseLifecycle } from '../components/Lifecycle/ResponseLifecycle';
+import { SimulationIntroSequence } from '../components/Notice/SimulationIntroSequence';
+import { RoleWalkthroughTour } from '../components/Tour/RoleWalkthroughTour';
 
 // Dedicated Role Views
 import { FarmerView } from '../views/FarmerView/FarmerView';
@@ -25,6 +28,30 @@ import { SimulationControls } from '../components/SimulationControls/SimulationC
 
 export function MainContainer() {
   const sim = useSimulation();
+
+  // First-load & reload disclaimer modal state (shows on every reload/session start)
+  const [showNotice, setShowNotice] = useState(true);
+
+  // In-memory session tracking for first-time role walkthroughs (resets on reload)
+  const [visitedRoles, setVisitedRoles] = useState(new Set());
+  const [isTourActive, setIsTourActive] = useState(false);
+
+  // Trigger role tour when a new unvisited role screen is rendered
+  React.useEffect(() => {
+    if (!showNotice && !visitedRoles.has(sim.currentRole)) {
+      const timer = setTimeout(() => {
+        setIsTourActive(true);
+      }, 180);
+      return () => clearTimeout(timer);
+    } else {
+      setIsTourActive(false);
+    }
+  }, [showNotice, sim.currentRole, visitedRoles]);
+
+  const handleCloseTour = () => {
+    setIsTourActive(false);
+    setVisitedRoles(prev => new Set(prev).add(sim.currentRole));
+  };
 
   const renderActiveView = () => {
     switch (sim.currentRole) {
@@ -217,9 +244,27 @@ export function MainContainer() {
         onSelectRole={sim.setRole}
       />
 
-      {/* 3. Role View Container */}
-      <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        {renderActiveView()}
+      {/* 3. Main Workspace Layout: Permanent Left Lifecycle Panel + Center/Right Active Role View */}
+      <div className="console-workspace-layout">
+        {/* Permanent Left-Side Disease Response Lifecycle Panel */}
+        <ResponseLifecycle
+          anomalyDetected={sim.anomalyDetected}
+          farmerAlertGenerated={sim.farmerAlertGenerated}
+          farmerConfirmed={sim.farmerConfirmed}
+          paravetVerified={sim.paravetVerified}
+          caseCreated={sim.caseCreated}
+          riskScore={sim.riskScore}
+          sampleRequested={sim.sampleRequested}
+          labReceived={sim.labReceived}
+          labConfirmed={sim.labConfirmed}
+          govSurveillanceUpdated={sim.govSurveillanceUpdated}
+          feedbackLoopActive={sim.feedbackLoopActive}
+        />
+
+        {/* Dynamic Center/Right Role Workspace */}
+        <div className="console-role-view-area">
+          {renderActiveView()}
+        </div>
       </div>
 
       {/* 4. Floating Tactical Role Switcher */}
@@ -242,6 +287,21 @@ export function MainContainer() {
         workflowPassed={sim.workflowPassed}
         eventLog={sim.eventLog}
       />
+
+      {/* 7. Interactive First-Time Role Walkthrough Tour */}
+      <RoleWalkthroughTour
+        role={sim.currentRole}
+        isOpen={isTourActive}
+        onClose={handleCloseTour}
+        sim={sim}
+      />
+
+      {/* 8. Animated High-End Simulation Intro Sequence (Shows on initial load / reload) */}
+      {showNotice && (
+        <SimulationIntroSequence
+          onComplete={() => setShowNotice(false)}
+        />
+      )}
     </div>
   );
 }
